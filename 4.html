@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игровые ПК - Storm Net</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --main-dark: #000000;
+            --accent-purple: #8a2be2;
+            --accent-dark-purple: #4b0082;
+            --accent-light-purple: #9370db;
+            --text-light: #f8f9fa;
+            --gray-dark: #2a2a2a;
+        }
+
+        body {
+             background-color: var(--main-dark);
+    background-image: 
+        radial-gradient(circle at 25% 25%, rgba(138, 43, 226, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(147, 112, 219, 0.08) 0%, transparent 50%),
+        linear-gradient(45deg, transparent 49%, rgba(138, 43, 226, 0.03) 50%, transparent 51%);
+    background-size: 300px 300px, 400px 400px, 60px 60px;
+            color: var(--text-light);
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            padding-top: 250px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background-color: rgba(94, 0, 97, 0.95);
+            border-bottom: 2px solid var(--accent-purple);
+            z-index: 1000;
+            padding: 15px 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 160px;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+
+        nav a {
+            color: var(--text-light);
+            text-decoration: none;
+            font-weight: 500;
+            padding: 10px 0;
+            position: relative;
+            transition: color 0.3s;
+        }
+
+        nav a:hover,
+        nav a.active {
+            color: var(--accent-light-purple);
+        }
+
+        nav a::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: 0;
+            left: 0;
+            background-color: var(--accent-light-purple);
+            transition: width 0.3s;
+        }
+
+        nav a:hover::after,
+        nav a.active::after {
+            width: 100%;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-dark-purple));
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background: linear-gradient(135deg, var(--accent-light-purple), var(--accent-purple));
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+        }
+
+        section {
+            padding: 80px 0;
+        }
+
+        .section-title {
+            color: var(--accent-light-purple);
+            font-size: 2.5rem;
+            margin-bottom: 50px;
+            border-left: 4px solid var(--accent-purple);
+            padding-left: 15px;
+        }
+
+        .pcs-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .pc-card {
+            background: var(--gray-dark);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s;
+            border: 1px solid #444;
+        }
+
+        .pc-card:hover {
+            transform: translateY(-5px);
+            border-color: var(--accent-purple);
+            box-shadow: 0 10px 25px rgba(138, 43, 226, 0.2);
+        }
+
+        .pc-image {
+            width: 100%;
+            height: 250px;
+            background: var(--gray-dark);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .pc-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+
+        .pc-card:hover .pc-image img {
+            transform: scale(1.05);
+        }
+
+        .pc-image-placeholder {
+            font-size: 4rem;
+            color: var(--accent-light-purple);
+        }
+
+        .pc-info {
+            padding: 25px;
+        }
+
+        .pc-info h3 {
+            color: var(--accent-light-purple);
+            margin-bottom: 15px;
+            font-size: 1.4rem;
+        }
+
+        .specs {
+            list-style: none;
+            margin: 15px 0;
+        }
+
+        .specs li {
+            padding: 8px 0;
+            border-bottom: 1px solid #444;
+            color: var(--text-light);
+        }
+
+        .specs li:last-child {
+            border-bottom: none;
+        }
+
+        .price-tag {
+            color: var(--accent-purple);
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin: 15px 0;
+        }
+
+        footer {
+            background-color: #111;
+            border-top: 2px solid var(--accent-purple);
+            padding: 50px 0 20px;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-section h5 {
+            color: var(--accent-light-purple);
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+
+        .social-links {
+    display: flex;
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.social-links a {
+    color: var(--text-light);
+    font-size: 1.5rem;
+    transition: all 0.3s;
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    background: var(--gray-dark);
+    text-decoration: none;
+}
+
+.social-links a:hover {
+    color: white;
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-dark-purple));
+    transform: translateY(-3px);
+    box-shadow: 0 5px 15px rgba(138, 43, 226, 0.4);
+}
+
+
+.social-links a.vk:hover { background: #4C75A3; }
+.social-links a.telegram:hover { background: #2AABEE; }
+.social-links a.youtube:hover { background: #FF0000; }
+.social-links a.instagram:hover { background: linear-gradient(45deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D); }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: #888;
+        }
+
+.mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    cursor: pointer;
+    padding: 5px;
+    z-index: 1002;
+}
+
+.mobile-menu-toggle span {
+    width: 25px;
+    height: 3px;
+    background: var(--text-light);
+    margin: 3px 0;
+    transition: 0.3s;
+    border-radius: 2px;
+}
+
+/* Скрываем мобильную кнопку в десктопе */
+.mobile-booking-btn {
+    display: none;
+}
+
+/* Показываем десктопную кнопку */
+.desktop-booking-btn {
+    display: inline-block;
+}
+
+@media (max-width: 1024px) {
+    .logo img {
+        height: 100px !important;
+    }
+    
+    nav ul {
+        gap: 20px !important;
+    }
+    
+    body {
+        padding-top: 180px !important;
+    }
+}
+
+@media (max-width: 768px) {
+    .mobile-menu-toggle {
+        display: flex;
+    }
+    
+    .nav-menu {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80%;
+        height: 100vh;
+        background: rgba(94, 0, 97, 0.98);
+        transition: left 0.3s ease;
+        z-index: 1001;
+        padding: 80px 20px 20px;
+        box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+    }
+    
+    .nav-menu.active {
+        left: 0;
+    }
+    
+    .nav-menu ul {
+        flex-direction: column;
+        gap: 0 !important;
+    }
+    
+    .nav-menu li {
+        width: 100%;
+    }
+    
+    .nav-menu a {
+        display: block;
+        padding: 15px 10px !important;
+        border-bottom: 1px solid rgba(255,255,255,0.1);
+        font-size: 16px !important;
+    }
+    
+    .nav-menu a::after {
+        display: none;
+    }
+    
+    /* Показываем кнопку в мобильном меню */
+    .mobile-booking-btn {
+        display: block;
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 2px solid var(--accent-purple);
+    }
+    
+    .mobile-booking-btn .btn {
+        width: 100%;
+        text-align: center;
+        justify-content: center;
+    }
+    
+    /* Скрываем десктопную кнопку на мобильных */
+    .desktop-booking-btn {
+        display: none !important;
+    }
+    
+    .logo img {
+        height: 70px !important;
+    }
+    
+    body {
+        padding-top: 120px !important;
+    }
+    
+    header {
+        padding: 10px 0 !important;
+    }
+    
+    /* Анимация гамбургера */
+    .mobile-menu-toggle.active span:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(2) {
+        opacity: 0;
+    }
+    
+    .mobile-menu-toggle.active span:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+    }
+}
+
+@media (max-width: 480px) {
+    .logo img {
+        height: 60px !important;
+    }
+    
+    body {
+        padding-top: 100px !important;
+    }
+    
+    .nav-menu {
+        width: 100%;
+    }
+    
+    .mobile-booking-btn {
+        margin-top: 15px;
+        padding-top: 15px;
+    }
+}
+    </style>
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-content">
+            <div class="logo">
+                <img src="логопк клуб.svg" alt="Storm Net">
+            </div>
+            
+            <!-- Мобильное меню -->
+            <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+            
+            <nav class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="1.html">Главная</a></li>
+                    <li><a href="2.html">Услуги</a></li>
+                    <li><a href="3.html">Цены</a></li>
+                    <li><a href="4.html">Игровые ПК</a></li>
+                    <li><a href="5.html">Турниры</a></li>
+                    <li><a href="6.html">Контакты</a></li>
+                    <!-- Кнопка в мобильном меню -->
+                    <li class="mobile-booking-btn">
+                        <a href="7.html" class="btn">Забронировать</a>
+                    </li>
+                </ul>
+            </nav> 
+            <!-- Кнопка в десктопной версии -->
+            <a href="7.html" class="btn desktop-booking-btn">Забронировать</a>
+        </div>
+    </div>
+</header>
+
+    <section>
+        <div class="container">
+            <h2 class="section-title">Наши игровые компьютеры</h2>
+            <div class="pcs-grid">
+                <div class="pc-card">
+                    <div class="pc-image">
+    
+                         <img src="пк1.jpg" alt="Storm Pro Gamer">
+                        <div class="pc-image-placeholder"></div>
+                    </div>
+                    <div class="pc-info">
+                        <h3>Storm Pro Gamer</h3>
+                        <ul class="specs">
+                            <li>💻 Intel Core i9-14900K</li>
+                            <li>🎮 NVIDIA RTX 4090 24GB</li>
+                            <li>🧠 64GB DDR5 RAM</li>
+                            <li>⚡ 2TB NVMe SSD</li>
+                            <li>🖥️ 27" 240Hz IPS</li>
+                        </ul>
+                        <div class="price-tag">Профи тариф</div>
+                        <a href="8.html" class="btn">Забронировать</a>
+                    </div>
+                </div>
+
+                <div class="pc-card">
+                    <div class="pc-image">
+
+                         <img src="пк2.webp" alt="Storm Elite">
+                        <div class="pc-image-placeholder"></div>
+                    </div>
+                    <div class="pc-info">
+                        <h3>Storm Elite</h3>
+                        <ul class="specs">
+                            <li>💻 AMD Ryzen 9 7950X</li>
+                            <li>🎮 NVIDIA RTX 4080 16GB</li>
+                            <li>🧠 32GB DDR5 RAM</li>
+                            <li>⚡ 1TB NVMe SSD</li>
+                            <li>🖥️ 27" 165Hz IPS</li>
+                        </ul>
+                        <div class="price-tag">Стандарт тариф</div>
+                        <a href="8.html" class="btn">Забронировать</a>
+                    </div>
+                </div>
+                <div class="pc-card">
+                    <div class="pc-image">
+                       
+                         <img src="пк3.jpg" alt="Storm Premium"> 
+                        <div class="pc-image-placeholder"></div>
+                    </div>
+                    <div class="pc-info">
+                        <h3>Storm Premium</h3>
+                        <ul class="specs">
+                            <li>💻 Intel Core i9-13900K</li>
+                            <li>🎮 NVIDIA RTX 4090 24GB</li>
+                            <li>🧠 128GB DDR5 RAM</li>
+                            <li>⚡ 4TB NVMe SSD</li>
+                            <li>🖥️ 32" 360Hz IPS</li>
+                        </ul>
+                        <div class="price-tag">Премиум тариф</div>
+                        <a href="8.html" class="btn">Забронировать</a>
+                    </div>
+                </div>
+                <div class="pc-card">
+                    <div class="pc-image">
+
+                        <img src="пк4.webp" alt="Storm RGB Edition">
+                        <div class="pc-image-placeholder"></div>
+                    </div>
+                    <div class="pc-info">
+                        <h3>Storm RGB Edition</h3>
+                        <ul class="specs">
+                            <li>💻 AMD Ryzen 7 7800X3D</li>
+                            <li>🎮 NVIDIA RTX 4070 Ti</li>
+                            <li>🧠 32GB DDR5 RGB RAM</li>
+                            <li>⚡ 2TB NVMe SSD</li>
+                            <li>🖥️ 27" 240Hz IPS</li>
+                        </ul>
+                        <div class="price-tag">Профи тариф</div>
+                        <a href="8.html" class="btn">Забронировать</a>
+                    </div>
+                </div>
+                <div class="pc-card">
+                    <div class="pc-image">
+
+                         <img src="пк5.webp" alt="Storm Compact">
+                        <div class="pc-image-placeholder"></div>
+                    </div>
+                    <div class="pc-info">
+                        <h3>Storm Compact</h3>
+                        <ul class="specs">
+                            <li>💻 Intel Core i7-13700</li>
+                            <li>🎮 NVIDIA RTX 4060 Ti</li>
+                            <li>🧠 16GB DDR5 RAM</li>
+                            <li>⚡ 1TB NVMe SSD</li>
+                            <li>🖥️ 24" 144Hz IPS</li>
+                        </ul>
+                        <div class="price-tag">Стандарт тариф</div>
+                        <a href="8.html" class="btn">Забронировать</a>
+                    </div>
+                </div>
+                <div class="pc-card">
+                    <div class="pc-image">
+                         <img src="пк6.jpg" alt="Storm Ultimate">
+                        <div class="pc-image-placeholder"></div>
+                    </div>
+                    <div class="pc-info">
+                        <h3>Storm Ultimate</h3>
+                        <ul class="specs">
+                            <li>💻 AMD Threadripper PRO</li>
+                            <li>🎮 Dual RTX 4090</li>
+                            <li>🧠 256GB DDR5 RAM</li>
+                            <li>⚡ 8TB NVMe SSD RAID</li>
+                            <li>🖥️ 49" Super Ultrawide</li>
+                        </ul>
+                        <div class="price-tag">Премиум тариф</div>
+                        <a href="8.html" class="btn">Забронировать</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5>Storm Net</h5>
+                    <p>Лучший игровой клуб города с современным оборудованием и комфортной атмосферой для настоящих геймеров.</p>
+                </div>
+                <div class="footer-section">
+                    <h5>Контакты</h5>
+                    <p>📞 +7 (995) 465-15-21</p>
+                    <p>🕒 Круглосуточно</p>
+                    <p>📍 г. Челябинск, ул. Российская, 23</p>
+                </div>
+                <div class="footer-section">
+                    <h5>Социальные сети</h5>
+                    <div class="social-links">
+                        <a href="https://vk.com/qntorii" class="vk" target="_blank" title="ВКонтакте">
+                            <span>VK</span>
+                        </a>
+                        <a href="https://t.me/trol1bb" class="telegram" target="_blank" title=" Telegram">
+                            <span>TG</span>
+                        </a>
+                        <a href="https://www.youtube.com/qntorii" class="youtube" target="_blank" title=" YouTube">
+                            <span>YT</span>
+                        </a>
+                        <a href="https://www.instagram.com/qntorii" class="instagram" target="_blank" title="Instagram">
+                            <span>IG</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="copyright">
+            </div>
+        </div>
+    </footer>
+     <script>
+
+    const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+    const navMenu = document.getElementById('navMenu');
+    const body = document.body;
+
+    mobileMenuToggle.addEventListener('click', function() {
+        this.classList.toggle('active');
+        navMenu.classList.toggle('active');
+        body.style.overflow = navMenu.classList.contains('active') ? 'hidden' : '';
+    });
+
+    const navLinks = document.querySelectorAll('.nav-menu a');
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            mobileMenuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+            body.style.overflow = '';
+        });
+    });
+
+    document.addEventListener('click', function(event) {
+        const isClickInsideMenu = navMenu.contains(event.target);
+        const isClickOnToggle = mobileMenuToggle.contains(event.target);
+        
+        if (!isClickInsideMenu && !isClickOnToggle && navMenu.classList.contains('active')) {
+            mobileMenuToggle.classList.remove('active');
+            navMenu.classList.remove('active');
+            body.style.overflow = '';
+        }
+    });
+
+
+    navMenu.addEventListener('touchmove', function(e) {
+        if (this.classList.contains('active')) {
+            e.preventDefault();
+        }
+    }, { passive: false });
+</script>
+</body>
+</html>
